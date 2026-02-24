@@ -65,14 +65,22 @@ function playSound(customPath?: string, durationMs?: number) {
     }
 
     try {
-        activeProcess = spawn('afplay', [filePath]);
+        const args = [filePath];
+        if (durationMs && durationMs > 0) {
+            args.push('-t', (durationMs / 1000).toString());
+        }
+
+        const cp = spawn('afplay', args);
+        activeProcess = cp;
+
+        // Fallback safety kill in case -t doesn't work for some reason
         if (durationMs && durationMs > 0) {
             setTimeout(() => {
-                if (activeProcess) {
-                    activeProcess.kill();
+                if (activeProcess === cp) {
+                    cp.kill();
                     activeProcess = null;
                 }
-            }, durationMs);
+            }, durationMs + 100); // 100ms buffer after afplay should have ended itself
         }
     } catch (err) {
         console.error('Failed to play sound:', err);
