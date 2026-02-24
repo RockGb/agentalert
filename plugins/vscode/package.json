@@ -1,8 +1,8 @@
 {
   "name": "agent-alert",
   "displayName": "Agent Alert",
-  "description": "Plays a sound when the AI agent finishes a task.",
-  "version": "0.0.9",
+  "description": "Plays a sound when the AI agent finishes working on a task.",
+  "version": "0.0.8",
   "publisher": "OmogbolahanApata",
   "icon": "loglog.png",
   "license": "MIT",
