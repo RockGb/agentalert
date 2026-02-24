@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+dist/
+out/
+*.vsix
+*.log
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/*
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+bin/
+obj/

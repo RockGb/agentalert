@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>com.agentdone.sound</id>
+    <name>Agent Done Sound</name>
+    <vendor email="rock@example.com" url="https://example.com">rock</vendor>
+
+    <description><![CDATA[
+    Plays a sound when the AI agent finishes a task.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.agentdone.AgentDoneSettings"/>
+    </extensions>
+
+    <actions>
+        <action id="com.agentdone.PlaySoundAction" class="com.agentdone.PlaySoundAction" text="Play Done Sound Now"
+                description="Manually play the agent done sound">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

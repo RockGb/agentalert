@@ -1,0 +1,13 @@
+{
+    "name": "agentalert-monorepo",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "plugins/*"
+    ],
+    "scripts": {
+        "start": "npm run start -w apps/core-service",
+        "build": "npm run compile -w plugins/vscode",
+        "package": "npm run package -w plugins/vscode"
+    }
+}

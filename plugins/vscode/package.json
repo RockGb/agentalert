@@ -1,0 +1,80 @@
+{
+  "name": "agent-alert",
+  "displayName": "Agent Alert",
+  "description": "Plays a sound when the AI agent finishes a task.",
+  "version": "0.0.9",
+  "publisher": "OmogbolahanApata",
+  "icon": "loglog.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RockGb/agentalert.git"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "agentAlert.playSound",
+        "title": "Agent Alert: Play Sound Now"
+      }
+    ],
+    "configuration": {
+      "title": "Agent Alert",
+      "properties": {
+        "agentAlert.customSoundPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to a custom sound file (.aiff recommended for Mac)."
+        },
+        "agentAlert.heuristicTimeout": {
+          "type": "number",
+          "default": 2500,
+          "description": "Milliseconds to wait after AI generation before playing sound."
+        },
+        "agentAlert.presetSound": {
+          "type": "string",
+          "default": "Glass",
+          "enum": [
+            "None (Use Custom Path)",
+            "Glass",
+            "Hero",
+            "Ping",
+            "Submarine",
+            "Funk",
+            "Morse",
+            "Tink",
+            "Sosumi"
+          ],
+          "description": "Choose a built-in sound preset. Set to 'None' to use Custom Sound Path."
+        },
+        "agentAlert.playbackDuration": {
+          "type": "number",
+          "default": 0,
+          "description": "How long to play the sound for (in milliseconds). Set to 0 to play the full sound."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^18.14.2",
+    "typescript": "^4.9.5"
+  }
+}
