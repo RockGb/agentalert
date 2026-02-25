@@ -2,7 +2,7 @@
   "name": "agent-alert",
   "displayName": "Agent Alert",
   "description": "Plays a sound when the AI agent finishes working on a task.",
-  "version": "0.0.8",
+  "version": "0.1.1",
   "publisher": "OmogbolahanApata",
   "icon": "loglog.png",
   "license": "MIT",
@@ -33,7 +33,7 @@
         "agentAlert.customSoundPath": {
           "type": "string",
           "default": "",
-          "description": "Absolute path to a custom sound file (.aiff recommended for Mac)."
+          "description": "Absolute path to a custom sound file (.aiff/.wav/etc)."
         },
         "agentAlert.heuristicTimeout": {
           "type": "number",
@@ -52,9 +52,13 @@
             "Funk",
             "Morse",
             "Tink",
-            "Sosumi"
+            "Sosumi",
+            "Tada",
+            "Chimes",
+            "Ding",
+            "Notify"
           ],
-          "description": "Choose a built-in sound preset. Set to 'None' to use Custom Sound Path."
+          "description": "Choose a built-in sound preset (Note: Presets are platform-specific)."
         },
         "agentAlert.playbackDuration": {
           "type": "number",

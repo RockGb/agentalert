@@ -13,6 +13,7 @@ Plays a sound when your AI agent (GitHub Copilot, Cursor, Antigravity, etc.) fin
 ## Requirements
 
 1. **Mac OS**: Currently optimized for macOS using the built-in `afplay` command.
+2. **Windows**: Supported using native PowerShell audio playback.
 
 ## Setup
 

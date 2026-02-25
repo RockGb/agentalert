@@ -3,7 +3,17 @@ import * as vscode from 'vscode';
 
 let activeProcess: ChildProcess | null = null;
 
-const PRESETS: Record<string, string> = {
+const IS_WINDOWS = process.platform === 'win32';
+
+const PRESETS: Record<string, string> = IS_WINDOWS ? {
+    'Tada': 'C:\\Windows\\Media\\tada.wav',
+    'Chimes': 'C:\\Windows\\Media\\chimes.wav',
+    'Ding': 'C:\\Windows\\Media\\ding.wav',
+    'Notify': 'C:\\Windows\\Media\\notify.wav',
+    'Ringout': 'C:\\Windows\\Media\\ringout.wav',
+    'Speech On': 'C:\\Windows\\Media\\Speech On.wav',
+    'Speech Off': 'C:\\Windows\\Media\\Speech Off.wav'
+} : {
     'Glass': '/System/Library/Sounds/Glass.aiff',
     'Hero': '/System/Library/Sounds/Hero.aiff',
     'Ping': '/System/Library/Sounds/Ping.aiff',
@@ -45,19 +55,16 @@ export function activate(context: vscode.ExtensionContext) {
 function getEffectiveConfig() {
     const config = vscode.workspace.getConfiguration('agentAlert');
     const timeout = config.get<number>('heuristicTimeout', 2500);
-    const preset = config.get<string>('presetSound', 'Glass');
+    const preset = config.get<string>('presetSound', IS_WINDOWS ? 'Tada' : 'Glass');
     const customPath = config.get<string>('customSoundPath', '');
     const duration = config.get<number>('playbackDuration', 0);
 
-    const soundPath = preset === 'None (Use Custom Path)' ? customPath : preset;
+    const soundPath = preset === 'None (Use Custom Path)' ? customPath : (PRESETS[preset] || (IS_WINDOWS ? PRESETS['Tada'] : PRESETS['Glass']));
     return { timeout, soundPath, duration };
 }
 
-function playSound(customPath?: string, durationMs?: number) {
-    let filePath: string = customPath || PRESETS['Glass'];
+function playSound(filePath: string, durationMs?: number) {
     if (!filePath) return;
-
-    if (PRESETS[filePath]) filePath = PRESETS[filePath];
 
     if (activeProcess) {
         activeProcess.kill();
@@ -65,22 +72,30 @@ function playSound(customPath?: string, durationMs?: number) {
     }
 
     try {
-        const args = [filePath];
-        if (durationMs && durationMs > 0) {
-            args.push('-t', (durationMs / 1000).toString());
+        let cp: ChildProcess;
+
+        if (IS_WINDOWS) {
+            // PowerShell command to play sound
+            const psCommand = `(New-Object Media.SoundPlayer "${filePath}").PlaySync();`;
+            cp = spawn('powershell', ['-Command', psCommand]);
+        } else {
+            // macOS afplay command
+            const args = [filePath];
+            if (durationMs && durationMs > 0) {
+                args.push('-t', (durationMs / 1000).toString());
+            }
+            cp = spawn('afplay', args);
         }
 
-        const cp = spawn('afplay', args);
         activeProcess = cp;
 
-        // Fallback safety kill in case -t doesn't work for some reason
         if (durationMs && durationMs > 0) {
             setTimeout(() => {
                 if (activeProcess === cp) {
                     cp.kill();
                     activeProcess = null;
                 }
-            }, durationMs + 100); // 100ms buffer after afplay should have ended itself
+            }, durationMs + 100);
         }
     } catch (err) {
         console.error('Failed to play sound:', err);
